@@ -2,15 +2,18 @@
 #include <string.h>
 #include <stdio.h>
 
+#define REALLOC_SIZE 10
+
 int add_cell(int *X, int *Y, int *V, int x, int y, int v, int size){  //parametry funkcji to kolejno wskazniki do X,Y i V, wspolrzedne x i y komorki, aktualny rozmiar tablicy X i Y
 
-	X = realloc(X, size + 1);   //zwieksza rozm X
+    if (size >= sizeof (X) / sizeof (int)) { //zwieksza rozm X, Y, V jesli trzeba zapisac wiecej el. niz jest miejsca w tablicach
+        X = realloc(X, size + REALLOC_SIZE);
+        Y = realloc(Y, size + REALLOC_SIZE);
+        V = realloc(V, size + REALLOC_SIZE);
+    }
+	  
 	X[size] = x;                //dodaje nowa wartosc na koncu
-
-	Y = realloc(Y, size + 1);
 	Y[size] = y;
-
-    V = realloc(V, size + 1);
 	V[size] = v;                // przy wczytywaniu z pliku dodawane sa tez przeszkody
 
     return size + 1;
@@ -24,13 +27,16 @@ int remove_cell(int *X, int *Y, int *V, int x, int y, int size){
 			break;                                  //znajduje indeks danej komorki
 	
 	memmove(X+i, X+i+1, (size - i)*sizeof(int));    //przesuwa wszystko za dana komorka o 1 w lewo, komorka do usuniecia zostaje nadpisana
-	X = realloc(X, (size-1)*sizeof(int));               //zeby zwolnic ostatnie miejsce
-	
 	memmove(Y+i, Y+i+1, (size - i)*sizeof(int));
-	Y = realloc(Y, (size-1)*sizeof(int));
-
     memmove(V+i, V+i+1, (size - i)*sizeof(int));
-	V = realloc(V, (size-1)*sizeof(int));
+
+    //int sizeOfSparseMatrixTruncated = sizeof (X) / sizeof (int) - REALLOC_SIZE;
+    if (size - 1 <= sizeof (X) / sizeof (int) - REALLOC_SIZE) {
+        X = realloc(X, sizeof (X) / sizeof (int) - REALLOC_SIZE);
+        Y = realloc(Y, sizeof (X) / sizeof (int) - REALLOC_SIZE);
+        V = realloc(V, sizeof (X) / sizeof (int) - REALLOC_SIZE);
+    } // TODO KIEDYS wymyslic cos do zwalniania pamieci bo to wyrzuca mase warningow
+      // zwiazanych z przekroczeniem rozmiaru drugiego argumentu realloc przez max return value sizeof
 
     return size - 1;
 }
