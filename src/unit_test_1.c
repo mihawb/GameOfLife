@@ -27,8 +27,8 @@ int main(int argc, char *argv[]) {
         printf("K%d: %d %d %d\n", i+1, X[i], Y[i], V[i]);
     }
 
-    int sasiedztwoK3 = (X, Y, V, 4, 5, size);
-    int sasiedztwoK4 = (X, Y, V, 4, 6, size); // tak zrobilem zeby bylo czytelniej niz to printfa wrzucic xd
+    int sasiedztwoK3 = count_alive(X, Y, V, 4, 5, size);
+    int sasiedztwoK4 = count_alive(X, Y, V, 4, 6, size); // tak zrobilem zeby bylo czytelniej niz to printfa wrzucic xd
     printf("Liczba zywych komorek w sasiedztwie K3: %d, oraz K4: %d\n", sasiedztwoK3, sasiedztwoK4);
 
 	return 0;
