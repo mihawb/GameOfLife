@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "sparse_matrix.h"
 
-#define REALLOC_SIZE 1
+#define REALLOC_SIZE 5
 
 int main(int argc, char *argv[]) {
 	
@@ -11,8 +11,9 @@ int main(int argc, char *argv[]) {
     int *Y = (int*) malloc(sizeof(int) * REALLOC_SIZE);  //wspolzedne y komorek zywych lub przeszkod
     int *V = (int*) malloc(sizeof(int) * REALLOC_SIZE);  //wartosci komorek (determinuje czy mamy do czynienia z przeszkoda czy zywa komorka)
 
-    size = init_from_file(&X, &Y, &V, size, ".. / init_boards / ut_1.txt"); //jak w jakiejs funkcji jest realloc albo cos takiego to trzeba tak przekazywac
+    size = init_from_file(&X, &Y, &V, size, "../init_boards/ut_1.txt"); //jak w jakiejs funkcji jest realloc albo cos takiego to trzeba tak przekazywac
 
+    printf("size = %d\n", size);
     printf("    X Y V\n");
 	for (int i = 0; i < size; i++) {
         printf("K%d: %d %d %d\n", i+1, X[i], Y[i], V[i]);
