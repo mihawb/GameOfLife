@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "sparse_matrix.h"
 
-#define REALLOC_SIZE 5
+#define REALLOC_SIZE 10
 
 int main(int argc, char *argv[]) {
 	

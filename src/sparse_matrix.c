@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#define REALLOC_SIZE 5
+#define REALLOC_SIZE 1
 
 int add_cell(int** X, int** Y, int** V, int x, int y, int v, int size) {  //parametry funkcji to kolejno wskazniki do X,Y i V, wspolrzedne x i y komorki, aktualny rozmiar tablicy X i Y
 
@@ -116,7 +116,7 @@ int init_from_file(int** X, int** Y, int** V, int size, char* filename) { //przy
         for (int j = 0; j < sY; j++) {
             fscanf(in, "%d", &val);
             if (val != 0) {
-                printf("%d %d %d\n", i, j, val);
+                //printf("%d %d %d\n", i, j, val); //debug
                 size = add_cell(X, Y, V, i, j, val, size);
             }
         }
