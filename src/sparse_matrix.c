@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#define REALLOC_SIZE 2
+#define REALLOC_SIZE 4
 
 void add_cell(int** X, int** Y, int** V, int x, int y, int v, int* sizeF, int* sizeA) {  //parametry funkcji to kolejno wskazniki do X,Y i V, wspolrzedne x i y komorki, aktualny rozmiar tablicy X i Y
 
@@ -55,30 +55,54 @@ void remove_cell(int** X, int** Y, int** V, int x, int y, int* sizeF, int* sizeA
 }
 
 void dealloc_if_needed(int** X, int** Y, int** V, int* sizeF, int* sizeA) {
-    if ((*sizeA) - REALLOC_SIZE >= (*sizeF) - 1) {
-        void* temp;
-        temp = realloc(*X, sizeof(int) * ((*sizeF) - REALLOC_SIZE));
+    int n = (int)((*sizeF) / REALLOC_SIZE); // ilosc pelnych jednostek alokacyjnych
+    void* temp;
+    if (n * REALLOC_SIZE == (*sizeF)) { // czyli jesli nie bedzie zadnych czesciowo zapelnionych jednostek
+        temp = realloc(*X, sizeof(int) * (n * REALLOC_SIZE));
         if (temp == NULL) {
             fprintf(stderr, "ERROR in realloc, aborting\n");
             exit(EXIT_FAILURE);
         } else
             *X = temp;
 
-        temp = realloc(*Y, sizeof(int) * ((*sizeF) - REALLOC_SIZE));
+        temp = realloc(*Y, sizeof(int) * (n * REALLOC_SIZE));
         if (temp == NULL) {
             fprintf(stderr, "ERROR in realloc, aborting\n");
             exit(EXIT_FAILURE);
         } else
             *Y = temp;
 
-        temp = realloc(*V, sizeof(int) * ((*sizeF) - REALLOC_SIZE));
+        temp = realloc(*V, sizeof(int) * (n * REALLOC_SIZE));
         if (temp == NULL) {
             fprintf(stderr, "ERROR in realloc, aborting\n");
             exit(EXIT_FAILURE);
         } else
             *V = temp;
 
-        (*sizeA) -= REALLOC_SIZE;
+        *sizeA = n * REALLOC_SIZE;
+    } else {
+        temp = realloc(*X, sizeof(int) * ((n+1) * REALLOC_SIZE));
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
+            *X = temp;
+
+        temp = realloc(*Y, sizeof(int) * ((n+1) * REALLOC_SIZE));
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
+            *Y = temp;
+
+        temp = realloc(*V, sizeof(int) * ((n+1) * REALLOC_SIZE));
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
+            *V = temp;
+
+        *sizeA = (n+1) * REALLOC_SIZE;
     }
 }
 
