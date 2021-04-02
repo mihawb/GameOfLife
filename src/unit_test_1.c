@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
     printf("Usuwamy komorke K13 (5, 0) i K5 (1, 4)\n");
     remove_cell(&X, &Y, &V, 5, 0, &sizeFilled, &sizeAllocated);
     remove_cell(&X, &Y, &V, 1, 4, &sizeFilled, &sizeAllocated);
+    dealloc_if_needed(&X, &Y, &V, &sizeFilled, &sizeAllocated);
 
     printf("sizeF = %d\n", sizeFilled);
     printf("sizeA = %d\n", sizeAllocated);

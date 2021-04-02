@@ -9,21 +9,24 @@ void add_cell(int** X, int** Y, int** V, int x, int y, int v, int* sizeF, int* s
     if (*sizeA < (*sizeF) + 1) {
         void* temp;
         temp = realloc(*X, sizeof(int) * ((*sizeF) + REALLOC_SIZE));
-        if (temp == NULL)
-            printf("ERROR in realloc\n");
-        else
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
             *X = temp;
 
         temp = realloc(*Y, sizeof(int) * ((*sizeF) + REALLOC_SIZE));
-        if (temp == NULL)
-            printf("ERROR in realloc\n");
-        else
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
             *Y = temp;
 
         temp = realloc(*V, sizeof(int) * ((*sizeF) + REALLOC_SIZE));
-        if (temp == NULL)
-            printf("ERROR in realloc\n");
-        else
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
             *V = temp;
 
         (*sizeA) += REALLOC_SIZE;
@@ -48,30 +51,35 @@ void remove_cell(int** X, int** Y, int** V, int x, int y, int* sizeF, int* sizeA
     memmove(*Y + i, *Y + i + 1, ((*sizeF) - i) * sizeof(int));
     memmove(*V + i, *V + i + 1, ((*sizeF) - i) * sizeof(int));
 
+    (*sizeF)--;
+}
+
+void dealloc_if_needed(int** X, int** Y, int** V, int* sizeF, int* sizeA) {
     if ((*sizeA) - REALLOC_SIZE >= (*sizeF) - 1) {
         void* temp;
         temp = realloc(*X, sizeof(int) * ((*sizeF) - REALLOC_SIZE));
-        if (temp == NULL)
-            printf("ERROR in realloc\n");
-        else
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
             *X = temp;
 
         temp = realloc(*Y, sizeof(int) * ((*sizeF) - REALLOC_SIZE));
-        if (temp == NULL)
-            printf("ERROR in realloc\n");
-        else
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
             *Y = temp;
 
         temp = realloc(*V, sizeof(int) * ((*sizeF) - REALLOC_SIZE));
-        if (temp == NULL)
-            printf("ERROR in realloc\n");
-        else
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
             *V = temp;
 
         (*sizeA) -= REALLOC_SIZE;
     }
-
-    (*sizeF)--;
 }
 
 int count_alive(int* X, int* Y, int* V, int x, int y, int* sizeF) {

@@ -20,7 +20,6 @@ int main(int argc, char *argv[]) {
         printf("%d %d %d\n", X[i], Y[i], V[i]);
     }
     
-    
     int i = 0;
     while (sizeFilled > 0) {
         remove_cell(&X, &Y, &V, X[0], Y[0], &sizeFilled, &sizeAllocated);
