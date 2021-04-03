@@ -142,3 +142,12 @@ int init_from_file(int** X, int** Y, int** V, int* sizeF, int* sizeA, char* file
         }
     }
 }
+
+
+int find_elem(int* X, int* Y, int* V, int x, int y, int sizeF){
+    for(int i=0;i<sizeF;i++){
+        if(X[i] == x && Y[i] == y)
+            return V[i];
+    }
+    return 0;
+}
