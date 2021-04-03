@@ -20,7 +20,8 @@ int main(int argc, char *argv[]) {
     int *V = (int*) malloc(sizeof(int) * REALLOC_SIZE);  //wartosci komorek (determinuje czy mamy do czynienia z przeszkoda czy zywa komorka)
 
     init_from_file(&X, &Y, &V, &sizeFilled, &sizeAllocated, filename); //jak w jakiejs funkcji jest realloc albo cos takiego to trzeba tak przekazywac
-
+ 
+    //przeprowadzamy 10 cylki i tworzymy dla kazdego nowy plik outputX.txt w folderze outputs
     for(int i=0;i<10;i++) {
         cycle(&X,&Y,&V,&sizeFilled,&sizeAllocated,rows,columns);
         output_to_txt(X,Y,V, sizeFilled, rows,columns,cycle_number);

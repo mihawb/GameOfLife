@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "sparse_matrix.h"
 
+//przechodzimy po wszystkich wierszach i kolumanach i dodajemy do dwóch list komórki do usunięcia i komórki do dodania
+
 void cycle(int** X, int** Y, int** V, int *sizeF,int *sizeA, int rows, int columns){
     list_t elem_to_add = NULL;
     list_t elem_to_del = NULL;
@@ -15,6 +17,7 @@ void cycle(int** X, int** Y, int** V, int *sizeF,int *sizeA, int rows, int colum
         }
     }
 
+//dodajemy i odejmujemy komórki
     while(elem_to_add != NULL){
         add_cell(X,Y,V,elem_to_add->x,elem_to_add->y,elem_to_add->v,sizeF,sizeA);
         elem_to_add = elem_to_add->next;
