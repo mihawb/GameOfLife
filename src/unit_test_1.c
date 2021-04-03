@@ -7,7 +7,7 @@
 #define REALLOC_SIZE 3
 
 int main(int argc, char *argv[]) {
-    char *filename = "../init_boards/ut_1.txt";
+    char *filename = "../init_boards/ut_10_10.txt";
     FILE* in = fopen(filename,"r");
     int rows, columns;
     fscanf(in,"%d %d", &rows, &columns);
@@ -20,14 +20,13 @@ int main(int argc, char *argv[]) {
     int *V = (int*) malloc(sizeof(int) * REALLOC_SIZE);  //wartosci komorek (determinuje czy mamy do czynienia z przeszkoda czy zywa komorka)
 
     init_from_file(&X, &Y, &V, &sizeFilled, &sizeAllocated, filename); //jak w jakiejs funkcji jest realloc albo cos takiego to trzeba tak przekazywac
- 
-    //przeprowadzamy 10 cylki i tworzymy dla kazdego nowy plik outputX.txt w folderze outputs
-    for(int i=0;i<10;i++) {
-        cycle(&X,&Y,&V,&sizeFilled,&sizeAllocated,rows,columns);
-        output_to_txt(X,Y,V, sizeFilled, rows,columns,cycle_number);
-        cycle_number++;
-    }
 
+    for(int i=0;i<10;i++){
+	output_to_png(X,Y,V, sizeFilled, rows,columns,cycle_number);
+   	output_to_txt(X,Y,V, sizeFilled, rows,columns,cycle_number);
+	cycle(&X, &Y, &V, &sizeFilled, &sizeAllocated, rows, columns);
+	cycle_number++;
+    }
 
     return 0;
 }
