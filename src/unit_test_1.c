@@ -7,12 +7,19 @@
 #define REALLOC_SIZE 3
 
 int main(int argc, char *argv[]) {
+    //argv[1] = ile cykli chcemy przeprowadzić     
+    int n_cykli = argc > 1 ? atoi(argv[1]) : 10;
     char *filename = "../init_boards/ut_10_10.txt";
     FILE* in = fopen(filename,"r");
+    if(in == NULL){
+	printf("Nie udało się odczytać pliku");
+	return EXIT_FAILURE;
+    }
+
     int rows, columns;
     fscanf(in,"%d %d", &rows, &columns);
 
-    int cycle_number = 0;
+    int cycle_number = 0;                           //licznik cykli -> pomaga tworzyć plik o takiej nazwie 
     int sizeFilled = 0;                           //fun fact: mozna zaalokowac pamiec na 0 bajtow, kocham C
     int sizeAllocated = REALLOC_SIZE;
     int *X = (int*) malloc(sizeof(int) * REALLOC_SIZE);  //wspolzedne x komorek zywych lub przeszkod
@@ -21,8 +28,8 @@ int main(int argc, char *argv[]) {
 
     init_from_file(&X, &Y, &V, &sizeFilled, &sizeAllocated, filename); //jak w jakiejs funkcji jest realloc albo cos takiego to trzeba tak przekazywac
 
-    for(int i=0;i<10;i++){
-	output_to_png(X,Y,V, sizeFilled, rows,columns,cycle_number);
+    for(int i=0;i<n_cykli;i++){
+	output_to_png(X,Y,V, sizeFilled, rows,columns,cycle_number); 
    	output_to_txt(X,Y,V, sizeFilled, rows,columns,cycle_number);
 	cycle(&X, &Y, &V, &sizeFilled, &sizeAllocated, rows, columns);
 	cycle_number++;

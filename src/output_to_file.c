@@ -63,7 +63,7 @@ void write_png_file(char* file_name) {
 
   fclose(fp);
 }
-
+//czary - żywe, biały - martwe, szare - przeszkody
 void output_to_png(int* X, int* Y, int* V,int sizeF, int rows, int columns,int cycle_number){
   	 
   bit_depth = 8;
@@ -83,11 +83,14 @@ void output_to_png(int* X, int* Y, int* V,int sizeF, int rows, int columns,int c
 	      row[x] = 255;
       else if(find_elem(X,Y,V,y,x,sizeF) == 1)
 	      row[x] = 0;
+      else 
+	      row[x] = 125;
+	      
     }
   }
     char number[13];
     sprintf(number, "%d", cycle_number);
-    char *dest = "outputPNG";
+    char *dest = "../outputsPNG/outputPNG";
     char *exte = ".png";
     char *outp = (char*) malloc(1 + strlen(dest) + strlen(exte) + strlen(number));
     strcpy(outp,dest);
@@ -102,7 +105,7 @@ void output_to_txt(int* X, int* Y, int* V,int sizeF, int rows, int columns,int c
 
     char number[13];
     sprintf(number, "%d", cycle_number);
-    char *dest = "../outputs/output";
+    char *dest = "../outputsTXT/output";
     char *exte = ".txt";
     char *outp = (char*) malloc(1 + strlen(dest) + strlen(exte) + strlen(number));
     strcpy(outp,dest);
