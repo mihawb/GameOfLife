@@ -69,23 +69,32 @@ void output_to_png(int* X, int* Y, int* V,int sizeF, int rows, int columns,int c
   bit_depth = 8;
   width = columns;  
   height = rows;
-  color_type = PNG_COLOR_TYPE_GRAY;
+  color_type = PNG_COLOR_TYPE_RGB;
 
   number_of_passes = 7;
-  row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
+  row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height * 3);
   for (y=0; y<height; y++)
-    row_pointers[y] = (png_byte*) malloc(sizeof(png_byte) * width);
-
+    row_pointers[y] = (png_byte*) malloc(sizeof(png_byte) * width * 3);
+//implementacja zmiany koloru komórki RGB
   for (y=0; y<height; y++) {
     png_byte* row = row_pointers[y];
     for (x=0; x<width; x++) {
-      if(find_elem(X,Y,V,y,x,sizeF) == 0)
-	      row[x] = 255;
-      else if(find_elem(X,Y,V,y,x,sizeF) == 1)
-	      row[x] = 0;
-      else 
-	      row[x] = 125;
-	      
+      png_byte* ptr = &(row[x*3]);
+      if(find_elem(X,Y,V,y,x,sizeF) == 0){ //komórka pusta (0,0,0)
+        ptr[0] = 0;
+        ptr[1] = 0;
+        ptr[2] = 0;
+      }
+      else if(find_elem(X,Y,V,y,x,sizeF) == 1){ //komórka żywa(0,255,0)
+        ptr[0] = 0;
+        ptr[1] = 255;
+        ptr[2] = 0;
+      }
+      else{ //przeszkoda (255,0,0)
+        ptr[0] = 255;
+        ptr[1] = 0;
+        ptr[2] = 0;
+      } 
     }
   }
     char number[13];
