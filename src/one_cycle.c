@@ -5,7 +5,7 @@
 
 //przechodzimy po wszystkich wierszach i kolumanach i dodajemy do dwóch list komórki do usunięcia i komórki do dodania
 
-void cycle(int** X, int** Y, int** V, int *sizeF,int *sizeA, int rows, int columns){
+void cycle(int** X, int** Y, int** V, Color** C, int *sizeF,int *sizeA, int rows, int columns){
     list_t elem_to_add = NULL;
     list_t elem_to_del = NULL;
     for(int i=0;i<rows;i++){
@@ -19,11 +19,12 @@ void cycle(int** X, int** Y, int** V, int *sizeF,int *sizeA, int rows, int colum
 
 //dodajemy i odejmujemy komórki
     while(elem_to_add != NULL){
-        add_cell(X,Y,V,elem_to_add->x,elem_to_add->y,elem_to_add->v,sizeF,sizeA);
+        Color c = mix_colors(*X,*Y,*V,*C, elem_to_add->x,elem_to_add->y,sizeF);
+        add_cell(X,Y,V,C,elem_to_add->x,elem_to_add->y,elem_to_add->v,c, sizeF,sizeA);
         elem_to_add = elem_to_add->next;
     }
     while(elem_to_del != NULL){
-        remove_cell(X,Y,V,elem_to_del->x,elem_to_del->y,sizeF,sizeA);
+        remove_cell(X,Y,V,C,elem_to_del->x,elem_to_del->y,sizeF,sizeA);
         elem_to_del = elem_to_del->next;
     }
 

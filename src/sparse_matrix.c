@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include "sparse_matrix.h"
+#include <time.h>
 
 #define REALLOC_SIZE 4
 
-void add_cell(int** X, int** Y, int** V, int x, int y, int v, int* sizeF, int* sizeA) {  //parametry funkcji to kolejno wskazniki do X,Y i V, wspolrzedne x i y komorki, aktualny rozmiar tablicy X i Y
+void add_cell(int** X, int** Y, int** V, Color** C, int x, int y, int v, Color c, int* sizeF, int* sizeA) {  //parametry funkcji to kolejno wskazniki do X,Y i V, wspolrzedne x i y komorki, aktualny rozmiar tablicy X i Y
 
     if (*sizeA < (*sizeF) + 1) {
         void* temp;
@@ -29,17 +31,25 @@ void add_cell(int** X, int** Y, int** V, int x, int y, int v, int* sizeF, int* s
         } else
             *V = temp;
 
+        temp = realloc(*C, sizeof(Color) * ((*sizeF) + REALLOC_SIZE));
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
+            *C = temp;
+
         (*sizeA) += REALLOC_SIZE;
     }
 
     (*X)[*sizeF] = x;                //dodaje nowa wartosc na koncu
     (*Y)[*sizeF] = y;
-    (*V)[*sizeF] = v;                // przy wczytywaniu z pliku dodawane sa tez przeszkody
+    (*V)[*sizeF] = v;
+    (*C)[*sizeF] = c;                // przy wczytywaniu z pliku dodawane sa tez przeszkody
 
     (*sizeF)++;
 }
 
-void remove_cell(int** X, int** Y, int** V, int x, int y, int* sizeF, int* sizeA) {
+void remove_cell(int** X, int** Y, int** V, Color** C, int x, int y, int* sizeF, int* sizeA) {
 
     int i;
     for (i = 0; i < *sizeF; i++) {
@@ -50,6 +60,8 @@ void remove_cell(int** X, int** Y, int** V, int x, int y, int* sizeF, int* sizeA
     memmove(*X + i, *X + i + 1, ((*sizeF) - i) * sizeof(int));    //przesuwa wszystko za dana komorka o 1 w lewo, komorka do usuniecia zostaje nadpisana
     memmove(*Y + i, *Y + i + 1, ((*sizeF) - i) * sizeof(int));
     memmove(*V + i, *V + i + 1, ((*sizeF) - i) * sizeof(int));
+    memmove(*C + i, *C + i + 1, ((*sizeF) - i) * sizeof(Color));
+
 
     (*sizeF)--;
 }
@@ -124,20 +136,30 @@ int count_alive(int* X, int* Y, int* V, int x, int y, int* sizeF) {
     return alive;
 }
 
-int init_from_file(int** X, int** Y, int** V, int* sizeF, int* sizeA, char* filename) { //przypisujemy potem size=init-from_file()
+int init_from_file(int** X, int** Y, int** V, Color** C, int* sizeF, int* sizeA, char* filename) { //przypisujemy potem size=init-from_file()
     int sX, sY, val;
     FILE* in = fopen(filename, "r");
     if (in == NULL)
         return -1; //potem sprawdzamy czy size>0, wpp w mainie radzimy sobie z bledem wczytania pliku
 
     fscanf(in, "%d %d\n", &sX, &sY);
-
+    srand(time(NULL));
     for (int i = 0; i < sX; i++) {
         for (int j = 0; j < sY; j++) {
             fscanf(in, "%d", &val);
             if (val != 0) {
-                //printf("%d %d %d\n", i, j, val); //debug
-                add_cell(X, Y, V, i, j, val, sizeF, sizeA);
+                Color c;
+                if(val == 1){
+                    c.R = rand()%150 + 100;
+                    c.G = rand()%150 + 100;
+                    c.B = rand()%150 + 100;
+                }
+                else if(val == -1){
+                    c.R = 255;
+                    c.G = 0;
+                    c.B = 0;
+                }
+                add_cell(X, Y, V, C, i, j, val, c, sizeF, sizeA);
             }
         }
     }
@@ -150,4 +172,44 @@ int find_elem(int* X, int* Y, int* V, int x, int y, int sizeF){
             return V[i];
     }
     return 0;
+}
+
+Color get_color(int* X, int* Y, int* V, Color* C, int x, int y, int sizeF){
+    for(int i=0;i<sizeF;i++){
+        if(X[i] == x && Y[i] == y)
+            return C[i];
+    }
+    Color c;
+    c.R = 0;
+    c.G = 0;
+    c.B = 0;
+    return c;
+}
+
+Color mix_colors(int* X, int* Y, int* V, Color* C, int x, int y, int* sizeF){
+    int i, j, alive = 0;
+    Color c;
+    c.R = 0;
+    c.G = 0;
+    c.B = 0;
+
+    for (i = x - 1; i <= x + 1; i++) {                          
+        for (j = 0; j < *sizeF; j++) {
+            if (X[j] == i) {                                     
+                if (Y[j] >= y - 1 && Y[j] <= y + 1) {                
+                    if ((X[j] != x || Y[j] != y) && V[j] > 0){
+                        c.R += C[j].R;
+                        c.G += C[j].G;
+                        c.B += C[j].B;
+                        alive++; 
+                    }
+                                                       
+                }
+            }
+        }
+    }
+    c.R /= alive;
+    c.G /= alive;
+    c.B /= alive;
+    return c;
 }

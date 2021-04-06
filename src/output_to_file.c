@@ -64,7 +64,7 @@ void write_png_file(char* file_name) {
   fclose(fp);
 }
 //czary - żywe, biały - martwe, szare - przeszkody
-void output_to_png(int* X, int* Y, int* V,int sizeF, int rows, int columns,int cycle_number){
+void output_to_png(int* X, int* Y, int* V, Color*C, int sizeF, int rows, int columns,int cycle_number){
   	 
   bit_depth = 8;
   width = columns;  
@@ -80,21 +80,10 @@ void output_to_png(int* X, int* Y, int* V,int sizeF, int rows, int columns,int c
     png_byte* row = row_pointers[y];
     for (x=0; x<width; x++) {
       png_byte* ptr = &(row[x*3]);
-      if(find_elem(X,Y,V,y,x,sizeF) == 0){ //komórka pusta (0,0,0)
-        ptr[0] = 0;
-        ptr[1] = 0;
-        ptr[2] = 0;
-      }
-      else if(find_elem(X,Y,V,y,x,sizeF) == 1){ //komórka żywa(0,255,0)
-        ptr[0] = 0;
-        ptr[1] = 255;
-        ptr[2] = 0;
-      }
-      else{ //przeszkoda (255,0,0)
-        ptr[0] = 255;
-        ptr[1] = 0;
-        ptr[2] = 0;
-      } 
+      Color c = get_color(X,Y,V,C, y,x, sizeF);
+      ptr[0] = c.R;
+      ptr[1] = c.G;
+      ptr[2] = c.B;
     }
   }
     char number[13];
