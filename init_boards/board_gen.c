@@ -17,11 +17,12 @@ int main (int argc, char **argv) // ./a.out -f output_file -w w -h h -gun(glider
     int gliders = 0;
     int oscillators = 0;
     int statics = 0;
+    int rodziny = 1;
 
     // jak bedzie mi sie kiedys chcialo to dodam zeby program generowal
     // losowo rozmieszczone struktury (glider guny, dakoty, oscylatory itp)
     // flagi dodate tak przyszlosciowo 
-    while ((opt = getopt (argc, argv, "f:w:h:g:o:l:s:")) != -1) { //file, width, height, gun, osCillator, LWSS, static
+    while ((opt = getopt (argc, argv, "f:w:h:g:o:l:s:r:")) != -1) { //file, width, height, gun, osCillator, LWSS, static, liczba rodzin
         switch (opt) {
             case 'f':
                 output_file = optarg;
@@ -43,6 +44,9 @@ int main (int argc, char **argv) // ./a.out -f output_file -w w -h h -gun(glider
                 break;
             case 's':
                 statics = 1;
+                break;
+            case 'r':
+                rodziny = atoi(optarg);
                 break;
             default:
                 fprintf (stderr, "%s: unexpected error occured\n", argv[0]);
@@ -69,7 +73,7 @@ int main (int argc, char **argv) // ./a.out -f output_file -w w -h h -gun(glider
 */
 
     for (int i = 0; i < (width * height) / 10; i++) { // 10% planszy to beda losowo generowane zywe komorki
-        board[rand() % (width * height)] = 1;
+        board[rand() % (width * height)] = rand() % rodziny + 1;
     }
 
     fprintf(out, "%d %d\n", width, height);

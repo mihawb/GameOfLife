@@ -66,7 +66,7 @@ void remove_cell(int** X, int** Y, int** V, Color** C, int x, int y, int* sizeF,
     (*sizeF)--;
 }
 
-void dealloc_if_needed(int** X, int** Y, int** V, int* sizeF, int* sizeA) {
+void dealloc_if_needed(int** X, int** Y, int** V, Color** C, int* sizeF, int* sizeA) {
     int n = (int)((*sizeF) / REALLOC_SIZE); // ilosc pelnych jednostek alokacyjnych
     void* temp;
     if (n * REALLOC_SIZE == (*sizeF)) { // czyli jesli nie bedzie zadnych czesciowo zapelnionych jednostek
@@ -90,6 +90,13 @@ void dealloc_if_needed(int** X, int** Y, int** V, int* sizeF, int* sizeA) {
             exit(EXIT_FAILURE);
         } else
             *V = temp;
+        
+        temp = realloc(*C, sizeof(Color) * (n * REALLOC_SIZE));
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
+            *C = temp;
 
         *sizeA = n * REALLOC_SIZE;
     } else {
@@ -113,6 +120,13 @@ void dealloc_if_needed(int** X, int** Y, int** V, int* sizeF, int* sizeA) {
             exit(EXIT_FAILURE);
         } else
             *V = temp;
+
+        temp = realloc(*C, sizeof(Color) * ((n+1) * REALLOC_SIZE));
+        if (temp == NULL) {
+            fprintf(stderr, "ERROR in realloc, aborting\n");
+            exit(EXIT_FAILURE);
+        } else
+            *C = temp;
 
         *sizeA = (n+1) * REALLOC_SIZE;
     }
@@ -143,13 +157,13 @@ int init_from_file(int** X, int** Y, int** V, Color** C, int* sizeF, int* sizeA,
         return -1; //potem sprawdzamy czy size>0, wpp w mainie radzimy sobie z bledem wczytania pliku
 
     fscanf(in, "%d %d\n", &sX, &sY);
-    srand(time(NULL));
     for (int i = 0; i < sX; i++) {
         for (int j = 0; j < sY; j++) {
             fscanf(in, "%d", &val);
             if (val != 0) {
                 Color c;
-                if(val == 1){
+                if(val >= 1){
+                    srand(val);
                     c.R = rand()%150 + 100;
                     c.G = rand()%150 + 100;
                     c.B = rand()%150 + 100;

@@ -9,7 +9,7 @@
 int main(int argc, char *argv[]) {
     //argv[1] = ile cykli chcemy przeprowadzić   
     int n_cykli = argc > 1 ? atoi(argv[1]) : 10;
-    char *filename = argc > 2 ? argv[2] : "../init_boards/ut_400_400.txt";
+    char *filename = argc > 2 ? argv[2] : "../init_boards/ut_50_50.txt";
     
     FILE* in = fopen(filename,"r");
     if(in == NULL){
@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
         output_to_png(X,Y,V,C, sizeFilled, rows,columns,cycle_number); 
         output_to_txt(X,Y,V,sizeFilled,rows, columns,cycle_number);
         cycle(&X, &Y, &V, &C, &sizeFilled, &sizeAllocated, rows, columns);
+        dealloc_if_needed(&X, &Y, &V, &C, &sizeFilled, &sizeAllocated);
         cycle_number++;
     }
 

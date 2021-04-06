@@ -11,8 +11,8 @@ void cycle(int** X, int** Y, int** V, Color** C, int *sizeF,int *sizeA, int rows
     for(int i=0;i<rows;i++){
         for(int j=0;j<columns;j++){
             if(find_elem(*X,*Y,*V,i,j,*sizeF) == 0 && count_alive(*X,*Y,*V,i,j, sizeF) == 3)
-                elem_to_add = add_elem(elem_to_add,i,j,1);
-            if(find_elem(*X,*Y,*V,i,j,*sizeF) == 1 && count_alive(*X,*Y,*V,i,j, sizeF) != 3 && count_alive(*X,*Y,*V,i,j, sizeF) != 2)
+                elem_to_add = add_elem(elem_to_add,i,j,1); ///////// TODO zeby zamiast 1 podawac numer rodziny wygenerowany na podstawie koloru komorki (RGB > hex > dec np)
+            if(find_elem(*X,*Y,*V,i,j,*sizeF) >= 1 && count_alive(*X,*Y,*V,i,j, sizeF) != 3 && count_alive(*X,*Y,*V,i,j, sizeF) != 2)
                 elem_to_del = add_elem(elem_to_del,i,j,0);
         }
     }
