@@ -4,9 +4,9 @@
 #include "sparse_matrix.h"
 #include <time.h>
 
-#define REALLOC_SIZE 4
+#define REALLOC_SIZE 8
 
-void add_cell(int** X, int** Y, int** V, Color** C, int x, int y, int v, Color c, int* sizeF, int* sizeA) {  //parametry funkcji to kolejno wskazniki do X,Y i V, wspolrzedne x i y komorki, aktualny rozmiar tablicy X i Y
+void add_cell(int** X, int** Y, int** V, Color** C, int x, int y, int v, Color c, int* sizeF, int* sizeA) {
 
     if (*sizeA < (*sizeF) + 1) {
         void* temp;
@@ -41,10 +41,10 @@ void add_cell(int** X, int** Y, int** V, Color** C, int x, int y, int v, Color c
         (*sizeA) += REALLOC_SIZE;
     }
 
-    (*X)[*sizeF] = x;                //dodaje nowa wartosc na koncu
+    (*X)[*sizeF] = x; //dodaje nowa wartosc na koncu
     (*Y)[*sizeF] = y;
     (*V)[*sizeF] = v;
-    (*C)[*sizeF] = c;                // przy wczytywaniu z pliku dodawane sa tez przeszkody
+    (*C)[*sizeF] = c;                
 
     (*sizeF)++;
 }
@@ -155,6 +155,7 @@ int init_from_file(int** X, int** Y, int** V, Color** C, int* sizeF, int* sizeA,
     FILE* in = fopen(filename, "r");
     if (in == NULL)
         return -1; //potem sprawdzamy czy size>0, wpp w mainie radzimy sobie z bledem wczytania pliku
+                   //ostatecznie filehandle wczystywany jest juz wczesniej przed wykonaniem tej funkcji wiec tego potem nie sptawdzamy 
 
     fscanf(in, "%d %d\n", &sX, &sY);
     for (int i = 0; i < sX; i++) {
