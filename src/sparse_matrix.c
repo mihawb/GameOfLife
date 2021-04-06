@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #define REALLOC_SIZE 4
+extern int max_x, max_y;
 
 void add_cell(int** X, int** Y, int** V, int x, int y, int v, int* sizeF, int* sizeA) {  //parametry funkcji to kolejno wskazniki do X,Y i V, wspolrzedne x i y komorki, aktualny rozmiar tablicy X i Y
 
@@ -116,6 +117,51 @@ int count_alive(int* X, int* Y, int* V, int x, int y, int* sizeF) {
                 if (Y[j] >= y - 1 && Y[j] <= y + 1) {                //jesli tak to czy w Y jest parametr y komorki
                     if ((X[j] != x || Y[j] != y) && V[j] > 0)   //jesli tak i to nie jest ta komorka ktorej sasiedztwo sprawdzamy oraz czy nie jest to przeszkoda
                         alive++;                                //to zwieksza sie licznik zywych komorek
+                }
+            }
+        }
+    }
+
+    if (x == 0 || x == max_x) {  //przypadek gdzie x jest skrajny
+        if (x == 0)
+            i = max_x;
+        if (x == max_x)
+            i = 0;
+
+
+        for (j = 0; j < *sizeF; j++) {
+            if (X[j] == i) {
+                if (Y[j] >= y - 1 && Y[j] <= y + 1) {
+                    if ((X[j] != x || Y[j] != y) && V[j] > 0)
+                        alive++;
+                }
+            }
+        }
+    }
+
+    if (y == 0 || y == max_y) {    //przypadek gdzie y jest skrajny
+        if (y == 0) {
+            for (i = x - 1; i <= x + 1; i++) {
+                for (j = 0; j < *sizeF; j++) {
+                    if (X[j] == i) {
+                        if (Y[j] == max_y) {
+                            if ((X[j] != x || Y[j] != y) && V[j] > 0)
+                                alive++;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (y == max_y) {
+            for (i = x - 1; i <= x + 1; i++) {
+                for (j = 0; j < *sizeF; j++) {
+                    if (X[j] == i) {
+                        if (Y[j] == 0) {
+                            if ((X[j] != x || Y[j] != y) && V[j] > 0)
+                                alive++;
+                        }
+                    }
                 }
             }
         }

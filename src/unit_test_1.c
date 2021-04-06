@@ -5,6 +5,7 @@
 #include "one_cycle.h"
 
 #define REALLOC_SIZE 3
+int max_x, max_y; // maksymalna wartosc x i y dla komorki
 
 int main(int argc, char *argv[]) {
     //argv[1] = ile cykli chcemy przeprowadzić     
@@ -18,6 +19,9 @@ int main(int argc, char *argv[]) {
 
     int rows, columns;
     fscanf(in,"%d %d", &rows, &columns);
+
+    max_x = rows - 1;
+    max_y = columns - 1;
 
     int cycle_number = 0;                           //licznik cykli -> pomaga tworzyć plik o takiej nazwie 
     int sizeFilled = 0;                           //fun fact: mozna zaalokowac pamiec na 0 bajtow, kocham C
