@@ -63,7 +63,7 @@ void write_png_file(char* file_name) {
 
   fclose(fp);
 }
-//czary - żywe, biały - martwe, szare - przeszkody
+
 void output_to_png(int* X, int* Y, int* V, Color*C, int sizeF, int rows, int columns,int cycle_number){
   	 
   bit_depth = 8;
