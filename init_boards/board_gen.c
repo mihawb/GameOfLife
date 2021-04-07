@@ -1,28 +1,18 @@
-// gcc board_gen.c -o testgen.out
-// testgen.out -f test_out.txt -w 10 -h 9 -g -l -o -s
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
 #include <time.h>
 
-int main (int argc, char **argv) // ./a.out -f output_file -w w -h h -gun(glider gun) -osc(krokodyl lub fontanna) -lwss -stat
+int main (int argc, char **argv)
 {
     srand(time(NULL));
     int opt;
     char *output_file;
     int width;
     int height;
-    int guns = 0;
-    int gliders = 0;
-    int oscillators = 0;
-    int statics = 0;
     int rodziny = 1;
-
-    // jak bedzie mi sie kiedys chcialo to dodam zeby program generowal
-    // losowo rozmieszczone struktury (glider guny, dakoty, oscylatory itp)
-    // flagi dodate tak przyszlosciowo 
-    while ((opt = getopt (argc, argv, "f:w:h:g:o:l:s:r:")) != -1) { //file, width, height, gun, osCillator, LWSS, static, liczba rodzin
+    
+    while ((opt = getopt (argc, argv, "f:w:h:r:")) != -1) {
         switch (opt) {
             case 'f':
                 output_file = optarg;
@@ -33,18 +23,6 @@ int main (int argc, char **argv) // ./a.out -f output_file -w w -h h -gun(glider
             case 'h':
                 height = atoi(optarg);
                 break;
-            case 'g':
-                guns = 1;
-                break;
-            case 'o':
-                oscillators = 1;
-                break;
-            case 'l':
-                gliders = 1;
-                break;
-            case 's':
-                statics = 1;
-                break;
             case 'r':
                 rodziny = atoi(optarg);
                 break;
@@ -53,10 +31,6 @@ int main (int argc, char **argv) // ./a.out -f output_file -w w -h h -gun(glider
                 exit (EXIT_FAILURE);
         }
     }
-/*
-    printf("DEBUG: file=%s, w=%d, h=%d, guns=%d, osc=%d, gliders=%d, statics=%d\n",
-                   output_file, width, height, guns, oscillators, gliders, statics);
-*/
 
     FILE *out = fopen(output_file, "w");
     if (out == NULL) {
@@ -77,11 +51,18 @@ int main (int argc, char **argv) // ./a.out -f output_file -w w -h h -gun(glider
     }
 
     fprintf(out, "%d %d\n", width, height);
-    for (int i = 0; i < height; i++) {
+    /*for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             fprintf(out, "%d ", board[i*height + j]);
         }
         fprintf(out, "\n");
+    }*/
+
+    for (int i = 0; i < width * height; i++) {
+        fprintf(out, "%d ", board[i]);
+        if ((i + 1) % width == 0) {
+            fprintf(out, "\n");
+        }
     }
 
     fclose(out);
