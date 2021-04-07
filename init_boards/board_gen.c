@@ -51,12 +51,6 @@ int main (int argc, char **argv)
     }
 
     fprintf(out, "%d %d\n", width, height);
-    /*for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            fprintf(out, "%d ", board[i*height + j]);
-        }
-        fprintf(out, "\n");
-    }*/
 
     for (int i = 0; i < width * height; i++) {
         fprintf(out, "%d ", board[i]);
