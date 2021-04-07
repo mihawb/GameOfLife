@@ -8,8 +8,8 @@ int main (int argc, char **argv)
     srand(time(NULL));
     int opt;
     char *output_file;
-    int width;
-    int height;
+    int width = 10;
+    int height = 10;
     int rodziny = 1;
     
     while ((opt = getopt (argc, argv, "f:w:h:r:")) != -1) {
